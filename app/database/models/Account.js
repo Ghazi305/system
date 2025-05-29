@@ -90,7 +90,7 @@ Account.associate = function(models) {
   Account.belongsTo(models.Account, { as: 'parent', foreignKey: 'parentId' });
 
   Account.hasMany(models.Account, { as: 'children', foreignKey: 'parentId' });
-  Account.hasMany(models.JournalEntry, { as: 'account', foreignKey: 'accountId' });
+  Account.hasMany(models.JournalEntry, { as: 'journalEntries', foreignKey: 'accountId' });
   Account.hasMany(models.OpeningBalance, { foreignKey: 'accountId' });
   Account.belongsTo(models.Currency, { as: "currency", foreignKey: 'currencyId' });
 };

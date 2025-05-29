@@ -58,7 +58,7 @@ class TrialBalanceController {
         ],
         include: [{
           model: Account,
-          as: 'accounts', 
+          as: 'account', 
           attributes: ['code', 'name'],
         }],
         group: ['accountId'],
@@ -105,7 +105,7 @@ class TrialBalanceController {
         ],
         include: [{
           model: Account,
-          as: 'accounts', 
+          as: 'account', 
           attributes: ['code', 'name'],
         }],
         group: ['accountId'],
@@ -124,7 +124,7 @@ class TrialBalanceController {
         ],
         include: [{
           model: Account,
-          as: 'accounts', 
+          as: 'account', 
           attributes: ['code', 'name'],
         }],
         group: ['accountId'],
@@ -137,7 +137,7 @@ class TrialBalanceController {
 
         return {
           accountId: currentEntry.accountId,
-          accountName: currentEntry.accounts.name,
+          accountName: currentEntry.account.name,
           currentPeriodDebit: currentEntry.total_debit,
           currentPeriodCredit: currentEntry.total_credit,
           comparisonPeriodDebit: comparisonEntry ? comparisonEntry.total_debit : 0,
@@ -147,7 +147,14 @@ class TrialBalanceController {
 
       return res.status(200).json({
         message: "Comparison between periods fetched successfully",
-        data: comparisonResults,
+        data: comparisonResults.map(entry => ({
+          accountId: entry.accountId,
+          accountName: entry.accountName,
+          currentPeriodDebit: parseFloat(entry.currentPeriodDebit) || 0,
+          currentPeriodCredit: parseFloat(entry.currentPeriodCredit) || 0,
+          comparisonPeriodDebit: parseFloat(entry.comparisonPeriodDebit) || 0,
+          comparisonPeriodCredit: parseFloat(entry.comparisonPeriodCredit) || 0,
+        })),
       });
 
     } catch (error) {

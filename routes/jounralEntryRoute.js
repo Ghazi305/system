@@ -6,8 +6,6 @@ router.get('/get-jounral', journalEntryController.getJournalEntries);
 
 router.post('/get-date', journalEntryController.getJournalEntriesByDate);
 
-router.post('/create', journalEntryController.create);
-
 router.put('/update/:id', journalEntryController.update);
 
 router.delete('/delete/:id', journalEntryController.delete);

@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-     journalId: {
+      journalId: {
          type: Sequelize.INTEGER,
          references: {
            model: 'journals',
@@ -29,6 +29,16 @@ module.exports = {
          onDelete: 'CASCADE',
          allowNull: false
        },
+       costCenterId: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'cost_centers',
+            key: 'id'
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE',
+          allowNull: false
+        },
        description: {
          type: Sequelize.STRING,
          allowNull: false

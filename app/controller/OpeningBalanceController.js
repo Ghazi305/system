@@ -3,7 +3,23 @@ const JournalEntry = require('../database/models/JournalEntry');
 
 class OpeningBalanceController {
     static async index(req, res) {
-        
+        try {
+            const openingBalances = await OpeningBalance.findAll({
+                include: [
+                    {
+                        model: Account,
+                        as: 'account',
+                    },
+                    {
+                        model: FiscalYear,
+                        as: 'fiscalYear',
+                    },
+                ]
+            });
+            return res.status(200).json(openingBalances);
+        } catch (error) {
+            return res.status(500).json({ message: "Error Server", error: error.message });
+        }
     }
 
     static async create(req, res) {

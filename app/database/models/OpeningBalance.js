@@ -40,7 +40,7 @@ const OpeningBalance = sequelize.define('OpeningBalance', {
 }); 
 
 OpeningBalance.associate = function(models) {
-  OpeningBalance.belongsTo(models.FiscalYear, { foreignKey: 'fiscalYearId' });
+  OpeningBalance.belongsTo(models.FiscalYear, { as: 'fiscalYear', foreignKey: 'fiscalYearId' });
   OpeningBalance.belongsTo(models.Account, { as: 'account', foreignKey: 'accountId' });
 };
 

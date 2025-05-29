@@ -8,17 +8,17 @@ class JournalEntriesController {
       const journalEntries = await JournalEntry.findAll({
         include: [{
           model: Account,
-          as: 'accounts',
+          as: 'account',
           attributes: ['code', 'name'],
         },
-        // {
-        //   model: CostCenter,
-        //   as: 'costCenter', 
-        // },
-        // {
-        //   model: Journal,
-        //   as: 'journalEntries'
-        // }
+        {
+          model: CostCenter,
+          as: 'costCenter', 
+        },
+        {
+          model: Journal,
+          as: 'journalEntries'
+        }
         ],
         order: [['createdAt', 'DESC']],
       });
@@ -78,48 +78,6 @@ class JournalEntriesController {
       });
     }
   }
-
-
-  static async create(req, res) {
-    const { journalId, accountId, description, debit, credit, costCenterId } = req.body;
-
-    try {
-      const journal = await Journal.findByPk(journalId);
-      const account = await Account.findByPk(accountId);
-
-      if (!journal) {
-        return res.status(404).json({
-            message: "jounral is not found",
-        });
-      }
-
-      if (!account) {
-        return res.status(404).json({
-            message: "account is not found",
-        });
-      }
-
-      const journalEntry = await JournalEntry.create({
-        journalId,
-        accountId,
-        description,
-        debit,
-        credit,
-        costCenterId
-      });
-
-      return res.status(201).json({
-        message: "Journal entry created successfully",
-        data: journalEntry,
-      });
-    } catch (error) {
-      return res.status(500).json({
-        message: "Error creating journal entry",
-        error: error.message,
-      });
-    }
-  }
-
 
   static async update(req, res) {
     const { id } = req.params;

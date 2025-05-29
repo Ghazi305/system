@@ -19,26 +19,26 @@ class BalanceSheetController {
           'accountId',
           [fn('SUM', col('debit')), 'total_debit'],
           [fn('SUM', col('credit')), 'total_credit'],
-          [col('accounts.accountType.type'), 'type'],
-          [col('accounts.name'), 'accountName']
+          [col('account.accountType.type'), 'type'],
+          [col('account.name'), 'accountName']
         ],
         include: [{
           model: Account,
-          as: 'accounts',
+          as: 'account',
           include: {
             model: AccountType,
             as: 'accountType',
             attributes: [],
             where: {
               type: {
-                [Op.or]: ['Asset', 'Liability', 'Revenue', 'Expense']
+                [Op.or]: ['Asset', 'Liability', 'Equity', 'Revenue', 'Expense']
               }
             }
           },
           attributes: [],
         }],
         where: whereClause,
-        group: ['accountId', 'accounts.accountType.type', 'accounts.name'],
+        group: ['accountId', 'account.accountType.type', 'account.name'],
         raw: true,
       });
 
@@ -53,32 +53,42 @@ class BalanceSheetController {
       const details = {
         assets: [],
         liabilities: [],
+        equity: [],
         revenue: [],
         expenses: []
       };
 
       balanceSheet.forEach(entry => {
         const type = entry.type;
-        const net = (parseFloat(entry.total_debit) || 0) - (parseFloat(entry.total_credit) || 0);
-        const credit = parseFloat(entry.total_credit) || 0;
         const debit = parseFloat(entry.total_debit) || 0;
+        const credit = parseFloat(entry.total_credit) || 0;
+        let balance = 0;
+
+        if (type === 'Asset' || type === 'Expense') {
+          balance = debit - credit;
+        } else if (type === 'Liability' || type === 'Equity' || type === 'Revenue') {
+          balance = credit - debit;
+        }
 
         if (type === 'Asset') {
-          totals.assets += net;
-          details.assets.push({ name: entry.accountName, balance: net });
+          totals.assets += balance;
+          details.assets.push({ name: entry.accountName, balance });
         } else if (type === 'Liability') {
-          totals.liabilities += -net;
-          details.liabilities.push({ name: entry.accountName, balance: -net });
+          totals.liabilities += balance;
+          details.liabilities.push({ name: entry.accountName, balance });
+        } else if (type === 'Equity') {
+          totals.equity += balance;
+          details.equity.push({ name: entry.accountName, balance });
         } else if (type === 'Revenue') {
-          totals.revenue += credit;
-          details.revenue.push({ name: entry.accountName, balance: credit });
+          totals.revenue += balance;
+          details.revenue.push({ name: entry.accountName, balance });
         } else if (type === 'Expense') {
-          totals.expenses += debit;
-          details.expenses.push({ name: entry.accountName, balance: debit });
+          totals.expenses += balance;
+          details.expenses.push({ name: entry.accountName, balance });
         }
       });
 
-      totals.equity = totals.assets - totals.liabilities;
+      totals.netProfit = totals.revenue - totals.expenses;
 
       return res.status(200).json({
         message: "Balance Sheet fetched successfully",
