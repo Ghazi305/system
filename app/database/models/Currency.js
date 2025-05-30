@@ -5,15 +5,15 @@ const Account = require('./Account');
 const Currency = sequelize.define('Currency', {
    name: {
     type: DataTypes.STRING,
+    allowNull: false
    },
-    code: {
-      type: DataTypes.STRING,
-    },
     symbol: {
       type: DataTypes.STRING,
+      allowNull: false
     },
     rate: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     }
 }, {
     timestamps: true,

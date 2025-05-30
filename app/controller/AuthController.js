@@ -1,5 +1,5 @@
 const { User } = require('../database/models');
-const { Sequelize, where } = require('sequelize');
+const { Sequelize } = require('sequelize');
 const secret = process.env.JWT_SECRET_KEY;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -69,6 +69,27 @@ class AuthController {
     static async logout(req, res) {
         try {
             return res.status(200).json({ message: "User logged out successfully" });
+        } catch (error) {
+            return res.status(500).json({
+                message: "Error Server",
+                error: error.message,
+            })
+        }
+    }
+
+    static async getProfile(req, res) {
+        const { id } = req.params;
+        try {
+            const user = await User.findByPk(id);
+            if (!user) {
+                return res.status(404).json({ message: "user not found"})
+            }
+            return res.status(200).json({
+                username: user.username,
+                email: user.email,
+                phone: user.phone,
+                role: user.role
+            });
         } catch (error) {
             return res.status(500).json({
                 message: "Error Server",

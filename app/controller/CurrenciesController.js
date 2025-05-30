@@ -14,10 +14,10 @@ class CurrenciesController {
   }
 
   static async create(req, res) {
-    const { name, code, symbol, rate } = req.body;
+    const { name, symbol, rate } = req.body;
 
     try {
-      const currency = await Currency.create({ name, code, symbol, rate });
+      const currency = await Currency.create({ name, symbol, rate });
       return res.status(201).json({
         message: 'Currency created successfully',
         data: currency
@@ -32,7 +32,7 @@ class CurrenciesController {
 
   static async update(req, res) {
     const { id } = req.params;
-    const { name, code, symbol, rate } = req.body;
+    const { name, symbol, rate } = req.body;
 
     try {
       const currency = await Currency.findByPk(id);
@@ -41,7 +41,7 @@ class CurrenciesController {
         return res.status(404).json({ message: 'Currency not found' });
       }
 
-      await Currency.update({ name, code, symbol, rate }, { where: { id } });
+      await Currency.update({ name, symbol, rate }, { where: { id } });
 
       return res.status(200).json({ message: 'Currency updated successfully' });
     } catch (error) {

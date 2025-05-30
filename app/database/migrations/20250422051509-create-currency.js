@@ -13,10 +13,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      code: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       symbol: {
         type: Sequelize.STRING,
         allowNull: false,
