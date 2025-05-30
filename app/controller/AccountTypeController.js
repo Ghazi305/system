@@ -1,4 +1,5 @@
 const { AccountType } = require('../database/models');
+const Helpers = require('../utils/Helpers');
 
 
 class AccountTypeController {
@@ -36,11 +37,13 @@ class AccountTypeController {
     }
 
     static async create(req, res) {
-        const { code, name, type } = req.body;
+        const { name, type } = req.body;
+
+        const accountCode = await Helpers.generateUniqueAccountTypeNumber();
 
         try {
             const accountType = await AccountType.create({
-                code,
+                code: accountCode,
                 name,
                 type
             });

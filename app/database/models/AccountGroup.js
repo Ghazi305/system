@@ -5,9 +5,11 @@ const Account = require('./Account');
 const AccountGroup = sequelize.define('AccountGroup', {
   code: {
     type: DataTypes.STRING,
+    allowNull: false
   },
   name: {
     type: DataTypes.STRING,
+    allowNull: false
   },
 }, {
     timestamps: true,

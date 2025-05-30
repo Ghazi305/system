@@ -11,6 +11,8 @@ router.post('logout', authController.logout);
 
 router.put('/rest-pass/:id', authController.resetPass);
 
+router.put('/update/:id', authController.updateUser);
+
 router.put('/chenge-pass/:id', authController.changePass);
 
 router.post('/send-otp', OTPController.sendOTP);

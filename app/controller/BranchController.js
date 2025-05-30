@@ -35,13 +35,14 @@ class BranchController {
   }
 
   static async create(req, res) {
-    const { code, name, address } = req.body;
+    const { code, name, address, phone } = req.body;
 
     try {
       const branch = await Branch.create({
         code,
         name,
-        address
+        address,
+        phone
       });
 
       return res.status(201).json({
@@ -58,7 +59,7 @@ class BranchController {
 
   static async update(req, res) {
     const { id } = req.params;
-    const { code, name, address } = req.body;
+    const { code, name, address, phone } = req.body;
 
     try {
       const branch = await Branch.findByPk(id);
@@ -70,7 +71,7 @@ class BranchController {
       }
 
       await Branch.update(
-        { code, name, address },
+        { code, name, address, phone },
         { where: { id } }
       );
 

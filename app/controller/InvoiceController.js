@@ -1,14 +1,19 @@
 const { Invoice, InvoiceItem, InvoicePayment, Payment, Account, JournalEntry, Journal, FiscalYear } = require('../database/models');
-const { v4: uuidv4 } = require('uuid');
+const Helpers = require('../utils/Helpers');
 
 
 class InvoiceController {
-
   static async createInvoice(req, res) {
-    const { customerName, totalAmount, invoiceType, description, items, payment } = req.body;
-  
+    console.log('req.body:', req.body);
+
+    const { customerName, totalAmount, invoiceType, description, items, payment } = req.body
+
     try {
+      
+      const invoiceNumber = await Helpers.generateUniqueInvoiceNumber();
+      
       const invoice = await Invoice.create({
+        invoiceNumber: invoiceNumber,
         customerName,
         totalAmount,
         invoiceType,
@@ -27,12 +32,13 @@ class InvoiceController {
           });
         }
       }
-  
+      
+      const referenceNumber = await Helpers.generateUniqueReferenceNumber();
       if (payment) {
         const paymentRecord = await Payment.create({
           amount: payment.amount,
           method: payment.method,
-          reference: payment.reference,
+          reference: referenceNumber,
           description: payment.description,
           date: new Date(),
           invoiceId: invoice.id,
@@ -200,7 +206,7 @@ class InvoiceController {
         date: new Date(),
         totalAmount: -amount,
         invoiceType: invoice.invoiceType,
-        status: 'refunded',
+        status: 'returned',
         notes: `مرتجع للفاتورة رقم ${invoice.id}`
       });
 

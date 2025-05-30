@@ -5,12 +5,19 @@ const Account = require('./Account')
 const Branch = sequelize.define('Branch', {
    name: {
     type: DataTypes.STRING,
+    allowNull: false,
    },
     code: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     address: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
     }
 }, {
     timestamps: true,

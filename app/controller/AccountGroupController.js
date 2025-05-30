@@ -1,4 +1,5 @@
 const { AccountGroup } = require('../database/models');
+const Helpers = require('../utils/Helpers');
 
 class AccountGroupController {
     static async index(req, res) {
@@ -35,11 +36,11 @@ class AccountGroupController {
     }
 
     static async create(req, res) {
-        const { code, name } = req.body;
-
+        const { name } = req.body;
+        const accountCode = await Helpers.generateUniqueAccountGroupNumber();
         try {
             const accountGroup = await AccountGroup.create({
-                code,
+                code: accountCode,
                 name
             });
 

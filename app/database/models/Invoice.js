@@ -3,6 +3,10 @@ const sequelize = require('../config/database');
 const Payment = require('./Payment')
 
 const Invoice = sequelize.define('Invoice', {
+  invoiceNumber: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   customerName: {
     type: Sequelize.STRING,
     allowNull: false
@@ -26,7 +30,7 @@ const Invoice = sequelize.define('Invoice', {
     allowNull: false,
   },
   status: {
-    type: Sequelize.ENUM('pending', 'paid', 'cancelled', 'under_review'),
+    type: Sequelize.ENUM('pending', 'paid', 'returned', 'cancelled', 'under_review'),
     allowNull: false,
     defaultValue: 'pending'
   },

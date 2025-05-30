@@ -1,5 +1,6 @@
 const { Journal, FiscalYear, JournalEntry } = require('../database/models');
 const { Op, where } = require('sequelize');
+const CostCenter = require('../database/models/CostCenter');
 
 
 class JournalController {
@@ -65,6 +66,7 @@ class JournalController {
 
       const journalEntries = entries.map(entry => ({
         journalId: journal.id,
+        costCenterId: entry.costCenterId,
         accountId: entry.accountId,
         description: entry.description,
         debit: entry.debit,

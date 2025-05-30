@@ -1,4 +1,5 @@
 const { Account, AccountType, AccountGroup, Currency } = require('../database/models');
+const Helpers = require('../utils/Helpers');
 
 class AccountController {
     static async index(req, res) {
@@ -41,10 +42,13 @@ class AccountController {
     }
 
     static async create(req, res) {
-        const { code, name, level, parentId, accountTypeId, groupId, currencyId, branchId, costCenterId } = req.body;
+        const { name, level, parentId, accountTypeId, groupId, currencyId, branchId, costCenterId } = req.body;
+        
+        const accountCode = await Helpers.generateUniqueAccountNumber();
+        
         try {
             const createAccount = await Account.create({
-                code,
+                code: accountCode,
                 name,
                 level,
                 parentId,

@@ -69,7 +69,7 @@ async function verifyOTP(email, enteredOtp) {
 
   } catch (err) {
     console.error("Error Verify Code OTP", err);
-    return { success: false, message: "حدث خطأ غير متوقع." };
+    return { success: false, message: "Error Server" };
   }
 }
 

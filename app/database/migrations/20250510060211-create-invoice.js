@@ -9,6 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      invoiceNumber: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       customerName: {
         type: Sequelize.STRING,
         allowNull: false
@@ -32,7 +36,7 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'paid', 'cancelled', 'under_review'),
+        type: Sequelize.ENUM('pending', 'paid', 'returned', 'cancelled', 'under_review'),
         allowNull: false,
         defaultValue: 'pending'
       },

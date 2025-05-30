@@ -1,35 +1,96 @@
-// const { Op } = require('sequelize');
-// const { Account, Transaction } = require('../database/models'); 
-// const { v4: uuidv4 } = require('uuid'); 
-// const Nodemailer = require("nodemailer");
-// const { MailtrapTransport } = require("mailtrap"); 
-// const cron = require('node-cron');
+const { Invoice, Account, AccountGroup, AccountType, Payment } = require('../database/models');
 
-// class Helpers {
-//   static async sendOTP(recipientEmail, message) {
-//     const TOKEN = "de24737571720df82a58c5e589a5fb96";
-    
-//     const transport = Nodemailer.createTransport(
-//       MailtrapTransport({
-//       token: TOKEN,
-//     })
-//   );
+class Helpers {
+  static async generateUniqueInvoiceNumber() {
+    try {
+        const lastAccount = await Invoice.findOne({
+        order: [['invoiceNumber', 'DESC']]
+        });
 
-//     const sender = {
-//        address: "hello@demomailtrap.com",
-//        name: "E-bank",
-//     }; 
-//     const recipients = [ recipientEmail ];
-    
-//    transport
-//   .sendMail({
-//     from: sender,
-//     to: recipients,
-//     subject: "Electronic Bank",
-//     text: message,
-//     category: "إرسال رمز التحقق",
-//   })
-//     .then(console.log, console.error);
-//   }
-// } 
-// module.exports =  { Helpers }; 
+
+        const lastNumberStr = lastAccount && lastAccount.invoiceNumber ? lastAccount.invoiceNumber.split('-')[1] : null;
+        const lastNumber = lastNumberStr && !isNaN(parseInt(lastNumberStr, 10)) ? parseInt(lastNumberStr, 10) : 0;
+        const nextNumber = lastNumber + 1;
+
+        return `ACC-${String(nextNumber).padStart(4, '0')}`;
+    } catch (error) {
+        console.error('Error generating invoice number:', error);
+        throw new Error('Unable to generate invoce number');
+    }
+  }
+
+ static async generateUniqueAccountNumber() {
+  try {
+    const lastAccount = await Account.findOne({
+      order: [['code', 'DESC']]
+    });
+
+    console.log('Last account code:', lastAccount ? lastAccount.code : 'No last account');
+
+    const lastNumberStr = lastAccount && lastAccount.code ? lastAccount.code.split('-')[1] : null;
+    const lastNumber = lastNumberStr && !isNaN(parseInt(lastNumberStr, 10)) ? parseInt(lastNumberStr, 10) : 0;
+    const nextNumber = lastNumber + 1;
+
+        return `ACC-${String(nextNumber).padStart(4, '0')}`;
+    } catch (error) {
+        console.error('Error generating account code:', error);
+        throw new Error('Unable to generate account code');
+    }
+  }
+
+  static async generateUniqueAccountTypeNumber() {
+    try {
+    const lastAccount = await AccountType.findOne({
+      order: [['code', 'DESC']]
+    });
+
+    console.log('Last account code:', lastAccount ? lastAccount.code : 'No last account');
+
+    const lastNumberStr = lastAccount && lastAccount.code ? lastAccount.code.split('-')[1] : null;
+    const lastNumber = lastNumberStr && !isNaN(parseInt(lastNumberStr, 10)) ? parseInt(lastNumberStr, 10) : 0;
+    const nextNumber = lastNumber + 1;
+
+        return `ACT-${String(nextNumber).padStart(4, '0')}`;
+    } catch (error) {
+        console.error('Error generating account code:', error);
+        throw new Error('Unable to generate account code');
+    }
+  }
+
+  static async generateUniqueAccountGroupNumber() {
+    try {
+    const lastAccount = await AccountGroup.findOne({
+      order: [['code', 'DESC']]
+    });
+
+
+    const lastNumberStr = lastAccount && lastAccount.code ? lastAccount.code.split('-')[1] : null;
+    const lastNumber = lastNumberStr && !isNaN(parseInt(lastNumberStr, 10)) ? parseInt(lastNumberStr, 10) : 0;
+    const nextNumber = lastNumber + 1;
+
+        return `ACG-${String(nextNumber).padStart(4, '0')}`;
+    } catch (error) {
+        console.error('Error generating account code:', error);
+        throw new Error('Unable to generate account code');
+    }
+  }
+
+  static async generateUniqueReferenceNumber() {
+    try {
+    const lastAccount = await Payment.findOne({
+      order: [['reference', 'DESC']]
+    });
+
+    const lastNumberStr = lastAccount && lastAccount.reference ? lastAccount.reference.split('-')[1] : null;
+    const lastNumber = lastNumberStr && !isNaN(parseInt(lastNumberStr, 10)) ? parseInt(lastNumberStr, 10) : 0;
+    const nextNumber = lastNumber + 1;
+
+        return `REF-${String(nextNumber).padStart(4, '0')}`;
+    } catch (error) {
+        console.error('Error generating reference code:', error);
+        throw new Error('Unable to generate reference code');
+    }
+  }
+}
+
+module.exports = Helpers;

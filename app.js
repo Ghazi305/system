@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 const authRoute = require('./routes/authRoute');
+const dashboradRoute = require('./routes/dashboradRoute');
 const accountRoute = require('./routes/accountRoute');
 const accountGroupRoute = require('./routes/accountGroupRoute');
 const accountTypeRoute = require('./routes/accountTypeRoute');
@@ -27,6 +28,7 @@ const openingBalanceRoute = require('./routes/openingBalanceRoute');
 
 
 app.use('/api/auth', authRoute);
+app.use('/api/dashborad', dashboradRoute);
 app.use('/api/account', accountRoute);
 app.use('/api/account-group', accountGroupRoute);
 app.use('/api/account-type', accountTypeRoute);

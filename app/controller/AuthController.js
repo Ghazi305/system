@@ -106,7 +106,7 @@ class AuthController {
         }
       }
        
-       static async changePass(req, res) {
+    static async changePass(req, res) {
         const { password, newPassword } = req.body;
         const { id } = req.params;
     
@@ -146,7 +146,55 @@ class AuthController {
             error: error.message,
          });
        }
-      }
+    }
+
+    static async updateUser(req, res) {
+        const { username, email, phone, password } = req.body;
+        const { id } = req.params;
+
+        try {
+            const user = await User.findByPk(id);
+            if (!user) {
+                return res.status(404).json({
+                    status: 'Error',
+                    message: 'User not found',
+                });
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({
+                    status: 'Error',
+                    message: 'Invalid password',
+                });
+            }
+
+            user.username = username || user.username;
+            user.email = email || user.email;
+            user.phone = phone || user.phone;
+
+            await user.save();
+
+            return res.status(200).json({
+                status: 'Success',
+                message: 'User updated successfully',
+                data: {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    phone: user.phone,
+                },
+            });
+
+        } catch (error) {
+            return res.status(500).json({
+                status: 'Error',
+                message: 'Error updating user',
+                error: error.message,
+            });
+        }
+    }
+
 }
 
 module.exports = AuthController;
