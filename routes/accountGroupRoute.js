@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router(); 
 const accountRouteGroup = require('../app/controller/AccountGroupController');
+const authMiddleware = require('../app/middleware/authMiddleware');
 
-router.get('/index', accountRouteGroup.index);
 
-router.get('/getAccount/:id', accountRouteGroup.getAccountGroupById);
+router.get('/index', authMiddleware, accountRouteGroup.index);
 
-router.post('/create', accountRouteGroup.create);
+router.get('/getAccount/:id', authMiddleware, accountRouteGroup.getAccountGroupById);
 
-router.put('/update/:id', accountRouteGroup.update);
+router.post('/create', authMiddleware, accountRouteGroup.create);
 
-router.delete('/delete/:id', accountRouteGroup.delete);
+router.put('/update/:id', authMiddleware, accountRouteGroup.update);
+
+router.delete('/delete/:id', authMiddleware, accountRouteGroup.delete);
 
 
 module.exports = router; 

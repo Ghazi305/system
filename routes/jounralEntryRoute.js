@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router(); 
 const journalEntryController = require('../app/controller/JournalEntriesController');
+const authMiddleware = require('../app/middleware/authMiddleware');
 
-router.get('/get-jounral', journalEntryController.getJournalEntries);
 
-router.post('/get-date', journalEntryController.getJournalEntriesByDate);
+router.get('/get-jounral', authMiddleware, journalEntryController.getJournalEntries);
 
-router.put('/update/:id', journalEntryController.update);
+router.post('/get-date', authMiddleware, journalEntryController.getJournalEntriesByDate);
 
-router.delete('/delete/:id', journalEntryController.delete);
+router.put('/update/:id', authMiddleware, journalEntryController.update);
+
+router.delete('/delete/:id', authMiddleware, journalEntryController.delete);
 
 
 module.exports = router; 

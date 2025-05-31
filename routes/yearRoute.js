@@ -1,15 +1,17 @@
 const express = require('express');
 const router = express.Router(); 
 const yearController = require('../app/controller/FiscalYearController');
+const authMiddleware = require('../app/middleware/authMiddleware');
 
-router.get('/index', yearController.index);
 
-router.post('/create', yearController.create);
+router.get('/index', authMiddleware, yearController.index);
 
-router.post('/close', yearController.closeFiscalYear);
+router.post('/create', authMiddleware, yearController.create);
 
-router.put('/update/:id', yearController.update);
+router.post('/close', authMiddleware, yearController.closeFiscalYear);
 
-router.delete('/delete/:id', yearController.delete);
+router.put('/update/:id', authMiddleware, yearController.update);
+
+router.delete('/delete/:id', authMiddleware, yearController.delete);
 
 module.exports = router; 

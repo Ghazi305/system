@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router(); 
 const branchController = require('../app/controller/BranchController');
+const authMiddleware = require('../app/middleware/authMiddleware');
 
-router.get('/index', branchController.index);
 
-router.get('/getAccount/:id', branchController.getBranchById);
+router.get('/index', authMiddleware, branchController.index);
 
-router.post('/create', branchController.create);
+router.get('/getAccount/:id', authMiddleware, branchController.getBranchById);
 
-router.put('/update/:id', branchController.update);
+router.post('/create', authMiddleware, branchController.create);
 
-router.delete('/delete/:id', branchController.delete);
+router.put('/update/:id', authMiddleware, branchController.update);
+
+router.delete('/delete/:id', authMiddleware, branchController.delete);
 
 
 module.exports = router; 

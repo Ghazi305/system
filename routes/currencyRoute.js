@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router(); 
 const currenciesController = require('../app/controller/CurrenciesController');
+const authMiddleware = require('../app/middleware/authMiddleware');
 
-router.get('/index', currenciesController.index);
 
-router.post('/create', currenciesController.create);
+router.get('/index', authMiddleware, currenciesController.index);
 
-router.put('/update/:id', currenciesController.update);
+router.post('/create', authMiddleware, currenciesController.create);
 
-router.delete('/delete/:id', currenciesController.delete);
+router.put('/update/:id', authMiddleware, currenciesController.update);
+
+router.delete('/delete/:id', authMiddleware, currenciesController.delete);
 
 
 module.exports = router; 

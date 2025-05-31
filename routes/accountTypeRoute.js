@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router(); 
 const accountTypeController = require('../app/controller/AccountTypeController');
+const authMiddleware = require('../app/middleware/authMiddleware');
 
-router.get('/index', accountTypeController.index);
 
-router.get('/getAccount/:id', accountTypeController.getAccountTypeById);
+router.get('/index', authMiddleware, accountTypeController.index);
 
-router.post('/create', accountTypeController.create);
+router.get('/getAccount/:id', authMiddleware, accountTypeController.getAccountTypeById);
 
-router.put('/update/:id', accountTypeController.update);
+router.post('/create', authMiddleware, accountTypeController.create);
 
-router.delete('/delete/:id', accountTypeController.delete);
+router.put('/update/:id', authMiddleware, accountTypeController.update);
+
+router.delete('/delete/:id', authMiddleware, accountTypeController.delete);
 
 
 module.exports = router; 
